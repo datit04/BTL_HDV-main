@@ -1,32 +1,19 @@
 package com.duc.manager.service;
 
 import com.duc.manager.dto.request.CustomerCreationRequest;
-import com.duc.manager.dto.request.ProductCreationRequest;
 import com.duc.manager.entity.Customers;
-import com.duc.manager.entity.Products;
 import com.duc.manager.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-//    public Customers createCustomer(CustomerCreationRequest request){
-//        Customers customer= new Customers();
-//
-//        customer.setName(request.getName());
-//        customer.setEmail(request.getEmail());
-//        customer.setPhone(request.getPhone());
-//        customer.setAddress(request.getAddress());
-//
-//        return customerRepository.save(customer);
-//    }
 
     public List<Customers> getCustomers(){
         return customerRepository.findAll();
@@ -35,12 +22,6 @@ public class CustomerService {
     public Customers getCustomer(int Id){
         return customerRepository.findById(Id).orElseThrow(() -> new RuntimeException("Customer not found"));
     }
-
-
-
-//    public long getQuantityCustomer(){
-//        return customerRepository.count();
-//    }
 
     public Customers updateCustomer(int Id, CustomerCreationRequest request){
         Customers customer = getCustomer(Id);
@@ -63,5 +44,14 @@ public class CustomerService {
         } else {
             return false;
         }
+    }
+
+    // Phân loại khách hàng theo tổng chi tiêu (VIP, Regular)
+    public List<Map<String, Object>> classifyCustomers() {
+        return customerRepository.classifyCustomersByTotalSpent();
+    }
+    // . Top 5 sản phẩm được khách hàng mua nhiều nhất
+    public List<Map<String, Object>> findPro() {
+        return customerRepository.customerFindOfOne();
     }
 }

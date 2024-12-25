@@ -1,16 +1,13 @@
 package com.duc.manager.controller;
 
 import com.duc.manager.dto.request.CustomerCreationRequest;
-import com.duc.manager.dto.request.ProductCreationRequest;
 import com.duc.manager.entity.Customers;
-import com.duc.manager.entity.Products;
 import com.duc.manager.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +16,9 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-//    @PostMapping("/createCustomer")
-//    Customers createCustomer(@RequestBody CustomerCreationRequest request){
-//        return customerService.createCustomer(request);
-//    }
 
-    @GetMapping("/getCustomer")
+
+    @GetMapping("/getCustomers")
     List<Customers> getCustomers(){
         return customerService.getCustomers();
     }
@@ -34,18 +28,11 @@ public class CustomerController {
         return customerService.getCustomer(Id);
     }
 
-//    @GetMapping("getQuantity")
-//    public ResponseEntity<Map<String, Long>> getTotalRevenue() {
-//        Long quantity = customerService.getQuantityCustomer();
-//        Map<String, Long> response = new HashMap<>();
-//        response.put("totalQuantity", quantity);
-//        return ResponseEntity.ok(response);
-//    }
 
-//    @PutMapping("/updateProduct/{Id}")
-//    Customers updateCustomer(@RequestBody CustomerCreationRequest request, @PathVariable int Id){
-//        return customerService.updateCustomer(Id,request);
-//    }
+    @PutMapping("/updateCustomer/{Id}")
+    Customers updateCustomer(@RequestBody CustomerCreationRequest request, @PathVariable int Id){
+        return customerService.updateCustomer(Id,request);
+    }
 
     @GetMapping("getCT")
     public List<Customers> getTopProductSales()
@@ -60,6 +47,18 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
         }
     }
+    // Phân loại khách hàng theo tổng chi tiêu (VIP, Regular)
+    @GetMapping("/classification")
+    public List<Map<String, Object>> getCustomerClassification() {
+        return customerService.classifyCustomers();
+    }
+
+    // Tìm khách hàng gần đây nhất có đơn đặt hàng
+    @GetMapping("/classification2")
+    public List<Map<String, Object>> getFindPro() {
+        return customerService.findPro();
+    }
+
 
 }
 
